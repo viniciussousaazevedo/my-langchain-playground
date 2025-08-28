@@ -7,13 +7,18 @@
 
 # I'm gonna use this import in every .py file. It does everything I've explained above
 from util.model_initalization import *
-print(prompt_chain().invoke({"input": "hello!"}))
+
+prompt = ChatPromptTemplate.from_messages([
+    ("user", "{input}")
+])
+
+print(llm_chain(prompt).invoke({"input": "hello!"}))
 
 # Let's break this down:
 
-# the prompt_chain() function is called (therefore, we have a chain 'prompt | llm | StrOutputParser()'
+# the 'llm_chain' function is called (therefore, we have a chain 'prompt | llm | StrOutputParser()'
 # the 'prompt' chain is filled with the 'input' value declared at the invoke function
-# this means that the prompt chain is formed without a system_message (because nothing was passed) and a user message 'hello!'
+# this means that the prompt chain is formed with a user message 'hello!'
 
 # now, we have this pipe ('|') thing, which is passing the output of the previous chain as an input to the next chain
 # so, the 'llm' chain is now being invoked with the prompt chain output to perform

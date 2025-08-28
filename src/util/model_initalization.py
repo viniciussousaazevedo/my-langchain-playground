@@ -7,11 +7,5 @@ llm = ChatGroq(
     temperature=0.0,
 )
 
-def prompt_chain(system_message: str = ""):
-    prompt = ChatPromptTemplate.from_messages([
-    ("system", system_message),
-    ("user", "{input}")
-    ])
+def llm_chain(prompt):
     return prompt | llm | StrOutputParser()
-
-
