@@ -1,0 +1,8 @@
+fastapi==0.109.2
+uvicorn==0.27.1
+pydantic==2.7.4
+python-dotenv==1.0.1
+groq==0.4.2
+langchain==0.3.19
+langchain-groq==0.2.4
+gradio==4.44.0
