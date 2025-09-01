@@ -6,3 +6,7 @@ By the way, I've got a lot of knowledge from NVidia DLI courses. You can check i
 ### Requirements
 - In order to run the files on `/src` folder, you must set up a Groq API Key on the `.env` file. You can get one [here](https://console.groq.com/keys)
 - Also, you must run `pip install -r requirements.txt`
+- To run any isolated file, you should do it like that:
+```bash
+python -m src.<folder>.<file_without_.py>
+```
