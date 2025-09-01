@@ -1,4 +1,4 @@
-# Whats up! Let's talk about LangChain's core feature: Chains (actually, these are Runnables, but the concept is the same)
+# Whats up! Let's talk about LangChain's core feature: Chains (actually, these are Runnables, but the concept is almost the same)
 # Chains are just like jigsaw pieces: It does not make sense alone, but together they form a beautyfull art!
 
 # You define how things should work in every chain, connect them and you use it later with the values you want to!
@@ -6,11 +6,10 @@
 
 
 # I'm gonna use this import in every .py file. It does everything I've explained above
-from util.model_initalization import *
+from ..setup import *
+from langchain_core.prompts import ChatPromptTemplate
 
-prompt = ChatPromptTemplate.from_messages([
-    ("user", "{input}")
-])
+prompt = ChatPromptTemplate.from_template("{input}")
 
 print(llm_chain(prompt).invoke({"input": "hello!"}))
 

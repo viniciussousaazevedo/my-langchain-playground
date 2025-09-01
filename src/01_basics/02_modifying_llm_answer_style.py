@@ -1,4 +1,5 @@
-from util.model_initalization import *
+from ..setup import *
+from langchain_core.prompts import ChatPromptTemplate
 
 contexts = [
     "you are almost freezing",
@@ -14,7 +15,7 @@ prompt = ChatPromptTemplate.from_messages([
 ])
 
 for context in contexts:
-    print(llm_chain(prompt).invoke({"input": "What do you like to do?", "context": context}), end='\n' + ('-'*20) + '\n')
+    print(llm_chain(prompt).invoke({"input": "What do you like to do?", "context": context}), end=divisor)
 
 # Here we had the same idea as the 01_hello_chain file, but now we add the context parameter to the chain,
 # which is a game changer for the way the LLM answer. Run this file to see how different the outputs are!
