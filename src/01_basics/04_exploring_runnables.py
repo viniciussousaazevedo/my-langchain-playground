@@ -8,3 +8,14 @@
 # 6. Formats the output as a JSON object.
 
 from ..llm import *
+
+def normalize(text: str) -> str:
+    # Simple normalization function
+    return ' '.join(text.strip().split()).lower()
+
+mood_classifier_prompt = ChatPromptTemplate.from_messages([
+    ("system", "you must classify the user input in only one word contained in these options: {options}"),
+    ("user", "{input}")
+])
+
+
