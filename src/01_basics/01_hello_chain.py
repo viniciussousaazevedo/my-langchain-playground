@@ -1,8 +1,7 @@
 # This is a simple hello for the LLM using chains
 
-from ..setup import *
-from langchain_core.prompts import ChatPromptTemplate
+from ..llm import *
 
 prompt = ChatPromptTemplate.from_template("{input}")
 
-print(llm_chain(prompt).invoke({"input": "hello!"}))
+print(llm.get_chain(prompt).invoke({"input": "hello!"}))
