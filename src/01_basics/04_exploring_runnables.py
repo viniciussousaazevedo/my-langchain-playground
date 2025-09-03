@@ -8,29 +8,30 @@
 # 6. Formats the output as a JSON object.
 
 from ..llm import *
-limited_model = LLM("llama-3.1-8b-instant")
 
 def normalize(text: str) -> str:
-    # Simple normalization function
-    return ' '.join(text.strip().split()).lower()
-normalize_runnable = RunnableLambda(lambda x: {"input": normalize(x["input"]), **x})
+    # Simple normalization function)
+    return " ".join(text.strip().split()).lower()
+normalize_runnable = RunnableAssign({'input': lambda x: normalize(x['input'])})
 
 mood_classifier_prompt = ChatPromptTemplate.from_messages([
-    ("system", "you must classify the user input in only one word contained in these options: {options}"),
-    ("user", "{input}")
+    ('system', "you must classify the user input in only one word contained in these options: {options}. You must also declare your model name at the end like the example provided, in parenthesis (e.g. Llama, GPT, Mistral, etc)."),
+    ('user', "I just got fired :("),
+    ('assistant', "sad ([Your Name])"),
+    ('user', "{input}")
 ])
 
-llm_instance = RunnableBranch(
-    (lambda x: len(x["input"].split()) < 10, limited_model),
-    llm
+model_selector = RunnableBranch(
+    (lambda x: len(x['input'].split()) < 10, lambda x: LLM("meta-llama/llama-4-scout-17b-16e-instruct")),
+    lambda x: LLM(),
 )
 
 main_chain = (
     normalize_runnable
-    mood_classifier_prompt
     | show_chain_data
-    | # TODO
-    
+    | RunnableAssign({'model': model_selector})
+    | show_chain_data
+    | RunnableLambda(lambda x: x['model'].get_chain(mood_classifier_prompt))
+    | show_chain_data
 )
-
-main_chain.invoke({"options": ['sad', 'angry', 'happy', 'confused'], "input": "I just got promoted in my job!"})
+main_chain.invoke({'options': ['sad', 'angry', 'happy', 'confused'], 'input': "I   just got promoted in my job!"})
