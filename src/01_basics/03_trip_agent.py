@@ -56,11 +56,11 @@ trip_duration_prompt = ChatPromptTemplate.from_messages([
 main_chain = (
       llm.get_chain(places2go_prompt)
     | show_chain_data
-    | {'itinerary_city': lambda x: choice(clean_and_split(x['answer']))}
+    | {'itinerary_city': lambda x: choice(clean_and_split(x))}
     | show_chain_data
     | llm.get_chain(itinerary_prompt)
     | show_chain_data
-    | {'trip_duration_input': lambda x: remove_random_elements(clean_and_split(x['answer']))}
+    | {'trip_duration_input': lambda x: remove_random_elements(clean_and_split(x))}
     | show_chain_data
     | llm.get_chain(trip_duration_prompt)
     | show_chain_data
