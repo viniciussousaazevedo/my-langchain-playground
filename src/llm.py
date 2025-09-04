@@ -12,7 +12,7 @@ class LLM:
     )
 
     def get_chain(self, prompt):
-        return prompt | self.llm | {'answer': StrOutputParser()}
+        return prompt | self.llm | StrOutputParser()
 
 llm = LLM()
 divisor = '\n' + ('-'*20) + '\n'
