@@ -4,11 +4,11 @@
 
 from ..llm import *
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.document_loaders import ArxivLoader
+from langchain_community.document_loaders import ArxivLoader
 
 ## Unstructured File Loader: Good for arbitrary "probably good enough" loader
 # documents = UnstructuredFileLoader("llama2_paper.pdf").load() # This loads local docs
-documents = ArxivLoader(query="2404.16130").load()  ## GraphRAG paper extracted direcly from Arxiv API
+paper = ArxivLoader(query="2404.16130").load()  ## GraphRAG paper extracted direcly from Arxiv API
 
 text_splitter = RecursiveCharacterTextSplitter(
     chunk_size=1024,
@@ -16,16 +16,24 @@ text_splitter = RecursiveCharacterTextSplitter(
     separators=["\n\n", "\n", ".", ";", ",", " ", ""],
 )
 
-docs_split = text_splitter.split_documents(documents)
+splitted_paper = text_splitter.split_documents(paper)
 
-def look_over_documents():
-    for chunk in docs_split:
+def look_over_documents(x):
+    for chunk in x['document']:
+        safe_content = chunk.page_content.replace("{", "{{").replace("}", "}}")
         prompt = ChatPromptTemplate.from_messages([
-            ('system', "Does this document snippet answers the question below? If so, answer it normally. If not, just say 'NO', and nothing more")
-            ('user', chunk)
+            ('system', f"Does this document snippet answers the question below? If so, answer it normally. If not, just say 'NO', and nothing more\n\n{x['input']}"),
+            ('user', safe_content)
         ])
-        answer = llm.get_chain(prompt).invoke()
+        answer = llm.get_chain(prompt).invoke(x)
 
-        if 'NO' in answer:
-            continue
-        return answer
+        if 'NO' not in answer:
+            return answer
+    return 'Question could not be answered based on the document loaded'
+
+dict_input = {
+    'document': splitted_paper,
+    'input': "When was this paper published?"
+}
+
+print(RunnableLambda(look_over_documents).invoke(dict_input))
