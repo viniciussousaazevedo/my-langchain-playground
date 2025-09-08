@@ -35,7 +35,8 @@ answer_prompt = ChatPromptTemplate.from_messages([
 kb_update_sys_msg = """
     Your task is to update your Knowledge Base based on the latest conversation you had with the user.
     Your output must only be the Knowledge Base updated, in JSON format.
-    OLD KNOWLEDGE BASE: {format_instructions}
+    OLD KNOWLEDGE BASE: {knowledge_base}
+    FORMAT INSTRUCTIONS: {format_instructions}
     USER LAST INPUT: {input}
     YOUR ANSWER: {answer}
 """
@@ -61,5 +62,4 @@ while True:
         'format_instructions': kb_parser.get_format_instructions()
     })
     knowledge_base = chain_exec['knowledge_base']
-    print(knowledge_base)
     print('Answer: ' + chain_exec['answer'], end=divisor)
