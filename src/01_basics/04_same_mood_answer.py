@@ -6,7 +6,7 @@
 # 4. Observes the text's length, determining which model will respond based on it.
 # 5. Creates a personalized message based with the same mood.
 
-from ..llm import *
+from ..util import *
 
 def normalize(text: str) -> str:
     # Simple normalization function)
@@ -21,8 +21,8 @@ mood_classifier_prompt = ChatPromptTemplate.from_messages([
 ])
 
 model_selector = RunnableBranch(
-    (lambda x: len(x['input'].split()) < 10, lambda x: LLM("meta-llama/llama-4-scout-17b-16e-instruct")),
-    lambda x: LLM(),
+    (lambda x: len(x['input'].split()) < 10, lambda x: InstructModel("meta-llama/llama-4-scout-17b-16e-instruct")),
+    lambda x: InstructModel(),
 )
 
 model_answer = ChatPromptTemplate.from_messages([

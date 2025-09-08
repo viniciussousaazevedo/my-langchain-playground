@@ -1,7 +1,6 @@
 # This is a simple hello for the LLM using chains
-
-from ..llm import *
+from ..util import *
 
 prompt = ChatPromptTemplate.from_template("{input}")
 
-print(llm.get_chain(prompt).invoke({"input": "hello!"}))
+print(instruct_model.get_chain(prompt).invoke({"input": "hello!"}))

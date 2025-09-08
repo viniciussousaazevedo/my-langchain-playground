@@ -5,7 +5,7 @@
 # 3. LLM answers the user based on topics 1 and 2
 # 4. LLM updates its Knowledge Base based on topics 1 and 3
 
-from ..llm import *
+from ..util import *
 from pydantic import BaseModel, Field
 from langchain.output_parsers import PydanticOutputParser
 from typing import Dict, Union
@@ -46,8 +46,8 @@ kb_update_prompt = ChatPromptTemplate.from_messages([
 
 # -------------------- Setting up the chain --------------------
 main_chain = (
-    RunnableAssign({'answer': llm.get_chain(answer_prompt)})
-    | RunnableAssign({'knowledge_base': kb_update_prompt | llm.llm | kb_parser})
+    RunnableAssign({'answer': instruct_model.get_chain(answer_prompt)})
+    | RunnableAssign({'knowledge_base': kb_update_prompt | instruct_model.model | kb_parser})
 )
 
 # -------------------- User Interaction --------------------

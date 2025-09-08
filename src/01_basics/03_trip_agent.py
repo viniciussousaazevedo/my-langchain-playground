@@ -3,7 +3,7 @@
 # # 3. Tell some places to go on that city
 # # 4. Think about how long it would be to visit some of these places on topic 3
 
-from ..llm import *
+from ..util import *
 from random import choice, randint, sample
 
 def remove_random_elements(lst):
@@ -54,15 +54,15 @@ trip_duration_prompt = ChatPromptTemplate.from_messages([
 
 # -------------------- MAIN CHAIN --------------------
 main_chain = (
-      llm.get_chain(places2go_prompt)
+      instruct_model.get_chain(places2go_prompt)
     | show_chain_data
     | {'itinerary_city': lambda x: choice(clean_and_split(x))}
     | show_chain_data
-    | llm.get_chain(itinerary_prompt)
+    | instruct_model.get_chain(itinerary_prompt)
     | show_chain_data
     | {'trip_duration_input': lambda x: remove_random_elements(clean_and_split(x))}
     | show_chain_data
-    | llm.get_chain(trip_duration_prompt)
+    | instruct_model.get_chain(trip_duration_prompt)
     | show_chain_data
 )
 

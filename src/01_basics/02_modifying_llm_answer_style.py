@@ -1,6 +1,6 @@
 # This is an example about how we can dinamically change the context provided in chains
 
-from ..llm import *
+from ..util import *
 
 contexts = [
     "you are almost freezing",
@@ -16,4 +16,4 @@ prompt = ChatPromptTemplate.from_messages([
 ])
 
 for context in contexts:
-    print(llm.get_chain(prompt).invoke({"input": "What do you like to do?", "context": context}), end=divisor)
+    print(instruct_model.get_chain(prompt).invoke({"input": "What do you like to do?", "context": context}), end=divisor)
