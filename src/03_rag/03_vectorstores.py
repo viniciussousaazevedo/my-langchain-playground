@@ -3,15 +3,16 @@
 # and update the Knowledge Base Pydantic object
 
 # 1. User send a message
-# 2. Embedding model brings relevant pieces of the Knowledge Base from FAISS DB
+# 2. Embedding model brings relevant pieces of the Knowledge Base from FAISS DB (pair: attribute name - value)
 # 2. LLM answers user based on the contextualization provided by topic 2
-# 4. LLM updates its Knowledge Base based the interaction that just happened
-# 5. Embedding model vectorizes the updated Knowledge Base and updates FAISS DB content
+# 4. LLM creates pairs of information to update the DB based the interaction that just happened and Knowledge Base template
+# 5. Embedding model vectorizes the the output of topic 4 and updates FAISS DB content
 
 from ..util import *
 from pydantic import BaseModel, Field
 from langchain.output_parsers import PydanticOutputParser
 from typing import Dict, Union
+from langchain.vectorstores import FAISS
 
 # -------------------- Setting up the Knowledge Base Object and FAISS database --------------------
 class KnowledgeBase(BaseModel):
@@ -23,10 +24,13 @@ class KnowledgeBase(BaseModel):
 
 kb_parser = PydanticOutputParser(pydantic_object=KnowledgeBase)
 knowledge_base = KnowledgeBase()
-# TODO: FAISS setup
 
-# -------------------- Retrieving relevant Knowledge Base snippets --------------------
-# TODO
+def (kb_obj):
+    str_obj = str(kb_obj)
+
+
+convstore = FAISS.from_texts(, embedding=embedding_model.model)
+retriever = convstore.as_retriever()
 
 # -------------------- Answering user based on Knowledge Base snippets --------------------
 answer_sys_msg = """
